@@ -1,0 +1,9 @@
+node_modules/
+temporary screenshots/
+tmp-ffmpeg/
+.claude/
+.playwright-mcp/
+debug-screenshot.mjs
+screenshot-scroll.mjs
+screenshot-sections.mjs
+screenshot.mjs
