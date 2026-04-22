@@ -4,7 +4,7 @@
    ===================================================== */
 
 // ---- CONSTANTS ----
-const FRAME_COUNT = 241;
+const FRAME_COUNT = 235;
 const FRAME_SPEED = 2.0;
 const DARK_OVERLAY_ENTER = 0.25;
 const DARK_OVERLAY_LEAVE = 0.38;
