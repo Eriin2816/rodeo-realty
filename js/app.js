@@ -578,6 +578,41 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 });
 
 // ====================================================
+// PROPERTY SLIDER
+// ====================================================
+(function initPropertySlider() {
+  const track  = document.getElementById('prop-slider');
+  const btnPrev = document.getElementById('prop-prev');
+  const btnNext = document.getElementById('prop-next');
+  if (!track || !btnPrev || !btnNext) return;
+
+  let current = 0;
+  const slides = track.querySelectorAll('.prop-slide');
+  const total  = slides.length;
+
+  function getVisible() {
+    return window.innerWidth < 768 ? 1 : 3;
+  }
+
+  function slideTo(idx) {
+    const visible = getVisible();
+    const max = Math.max(0, total - visible);
+    current = Math.max(0, Math.min(idx, max));
+    const slideW = slides[0].offsetWidth + parseFloat(getComputedStyle(track).gap || 16);
+    track.style.transform = `translateX(-${current * slideW}px)`;
+    track.style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    btnPrev.style.opacity = current === 0 ? '0.35' : '1';
+    btnNext.style.opacity = current >= max  ? '0.35' : '1';
+  }
+
+  btnNext.addEventListener('click', () => slideTo(current + 1));
+  btnPrev.addEventListener('click', () => slideTo(current - 1));
+  window.addEventListener('resize', () => slideTo(current));
+
+  slideTo(0);
+})();
+
+// ====================================================
 // START
 // ====================================================
 if (document.readyState === 'loading') {

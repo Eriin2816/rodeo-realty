@@ -238,50 +238,91 @@
         <span class="section-label">003 / Featured Residences</span>
         <h2 class="section-heading">Selected<br><em>Residences</em></h2>
       </div>
-      <div class="properties-grid">
-        <article class="property-card property-hero-card">
-          <div class="property-img-wrap">
-            <img src="brand_assets/woodman-ave.jpeg" alt="Sherman Oaks Estate" loading="lazy">
-            <div class="property-overlay"></div>
-            <span class="property-badge">Featured Listing</span>
+
+      <!-- Featured Hero Card -->
+      <div class="prop-hero">
+        <div class="prop-hero-img-wrap">
+          <img src="brand_assets/woodman-ave.jpeg" alt="4821 Woodman Ave, Sherman Oaks" loading="lazy">
+          <div class="prop-hero-overlay"></div>
+          <span class="property-badge">Featured Listing</span>
+          <div class="prop-hero-info">
+            <div class="prop-hero-price">$2,850,000</div>
+            <div class="prop-hero-address">4821 Woodman Ave, Sherman Oaks</div>
+            <div class="prop-hero-specs">5 BD &nbsp;·&nbsp; 4.5 BA &nbsp;·&nbsp; 4,200 SF</div>
           </div>
-          <div class="property-meta">
-            <div class="property-price">$2,850,000</div>
-            <div class="property-info">
-              <span class="property-address">4821 Woodman Ave, Sherman Oaks</span>
-              <span class="property-specs">5 BD &nbsp;·&nbsp; 4.5 BA &nbsp;·&nbsp; 4,200 SF</span>
+        </div>
+      </div>
+
+      <!-- Slider -->
+      <div class="prop-slider-outer">
+        <div class="prop-slider-track" id="prop-slider">
+          <article class="prop-slide">
+            <div class="prop-slide-img-wrap">
+              <img src="brand_assets/woodman-ave.jpeg" alt="Sherman Oaks Estate" loading="lazy">
+              <div class="prop-hero-overlay"></div>
+              <span class="prop-slide-tag">For Sale</span>
             </div>
-          </div>
-        </article>
-        <div class="properties-secondary">
-          <article class="property-card property-sm-card">
-            <div class="property-img-wrap">
-              <img src="brand_assets/studio-city.jpeg" alt="Studio City Residence" loading="lazy">
-              <div class="property-overlay"></div>
-            </div>
-            <div class="property-meta">
-              <div class="property-price">$1,650,000</div>
-              <div class="property-info">
-                <span class="property-address">Studio City, CA</span>
-                <span class="property-specs">4 BD &nbsp;·&nbsp; 3 BA &nbsp;·&nbsp; 2,800 SF</span>
-              </div>
+            <div class="prop-slide-meta">
+              <div class="prop-slide-price">$2,850,000</div>
+              <div class="prop-slide-address">4821 Woodman Ave, Sherman Oaks</div>
+              <div class="prop-slide-specs">5 BD &nbsp;·&nbsp; 4.5 BA &nbsp;·&nbsp; 4,200 SF</div>
             </div>
           </article>
-          <article class="property-card property-sm-card">
-            <div class="property-img-wrap">
-              <img src="brand_assets/encino.jpeg" alt="Encino Estate" loading="lazy">
-              <div class="property-overlay"></div>
+          <article class="prop-slide">
+            <div class="prop-slide-img-wrap">
+              <img src="brand_assets/studio-city.jpeg" alt="Studio City Residence" loading="lazy">
+              <div class="prop-hero-overlay"></div>
+              <span class="prop-slide-tag">For Sale</span>
             </div>
-            <div class="property-meta">
-              <div class="property-price">$3,200,000</div>
-              <div class="property-info">
-                <span class="property-address">Encino, CA</span>
-                <span class="property-specs">6 BD &nbsp;·&nbsp; 5 BA &nbsp;·&nbsp; 5,100 SF</span>
-              </div>
+            <div class="prop-slide-meta">
+              <div class="prop-slide-price">$1,650,000</div>
+              <div class="prop-slide-address">Studio City, CA</div>
+              <div class="prop-slide-specs">4 BD &nbsp;·&nbsp; 3 BA &nbsp;·&nbsp; 2,800 SF</div>
+            </div>
+          </article>
+          <article class="prop-slide">
+            <div class="prop-slide-img-wrap">
+              <img src="brand_assets/encino.jpeg" alt="Encino Estate" loading="lazy">
+              <div class="prop-hero-overlay"></div>
+              <span class="prop-slide-tag">For Sale</span>
+            </div>
+            <div class="prop-slide-meta">
+              <div class="prop-slide-price">$3,200,000</div>
+              <div class="prop-slide-address">Encino, CA</div>
+              <div class="prop-slide-specs">6 BD &nbsp;·&nbsp; 5 BA &nbsp;·&nbsp; 5,100 SF</div>
+            </div>
+          </article>
+          <article class="prop-slide">
+            <div class="prop-slide-img-wrap">
+              <img src="brand_assets/woodman-ave.jpeg" alt="Sherman Oaks View Estate" loading="lazy">
+              <div class="prop-hero-overlay"></div>
+              <span class="prop-slide-tag">For Sale</span>
+            </div>
+            <div class="prop-slide-meta">
+              <div class="prop-slide-price">$4,100,000</div>
+              <div class="prop-slide-address">Bel Air, CA</div>
+              <div class="prop-slide-specs">6 BD &nbsp;·&nbsp; 6 BA &nbsp;·&nbsp; 5,800 SF</div>
+            </div>
+          </article>
+          <article class="prop-slide">
+            <div class="prop-slide-img-wrap">
+              <img src="brand_assets/studio-city.jpeg" alt="Calabasas Estate" loading="lazy">
+              <div class="prop-hero-overlay"></div>
+              <span class="prop-slide-tag">For Sale</span>
+            </div>
+            <div class="prop-slide-meta">
+              <div class="prop-slide-price">$2,200,000</div>
+              <div class="prop-slide-address">Calabasas, CA</div>
+              <div class="prop-slide-specs">4 BD &nbsp;·&nbsp; 4 BA &nbsp;·&nbsp; 3,600 SF</div>
             </div>
           </article>
         </div>
+        <div class="prop-slider-nav">
+          <button class="prop-nav-btn" id="prop-prev" aria-label="Previous">&#8592;</button>
+          <button class="prop-nav-btn" id="prop-next" aria-label="Next">&#8594;</button>
+        </div>
       </div>
+
       <a href="#contact" class="cta-button">Inquire About Listings →</a>
     </div>
   </section>
@@ -422,44 +463,72 @@
   <section class="scroll-section section-footer"
            data-enter="93" data-leave="100" data-animation="fade-up" data-persist="true">
     <div class="footer-wrap">
-      <div class="footer-cta-col">
-        <span class="footer-eyebrow">Rodeo Realty · Sherman Oaks</span>
-        <h2 class="footer-heading">Ready to Begin<br><em>Your Journey?</em></h2>
-        <div class="footer-btn-row">
-          <a href="#contact" class="btn-primary">Schedule a Consultation</a>
-          <a href="tel:+18183120454" class="btn-ghost">+1 818-312-0454</a>
+
+      <!-- Watermark overlay -->
+      <div class="footer-watermark" aria-hidden="true">RR</div>
+
+      <!-- Top: CTA + Info columns -->
+      <div class="footer-top">
+        <div class="footer-cta-col">
+          <span class="footer-eyebrow">Rodeo Realty · Sherman Oaks</span>
+          <h2 class="footer-heading">Ready to Begin<br><em>Your Journey?</em></h2>
+          <div class="footer-btn-row">
+            <a href="#contact" class="btn-primary">Schedule a Consultation</a>
+            <a href="tel:+18183120454" class="btn-ghost">+1 818-312-0454</a>
+          </div>
+        </div>
+        <div class="footer-info-grid">
+          <div class="footer-col">
+            <h4 class="footer-col-label">Linda Haim</h4>
+            <p>Luxury Real Estate Advisor</p>
+            <a href="mailto:Lindahaim90210@gmail.com">Lindahaim90210@gmail.com</a>
+            <a href="tel:+18183120454">+1 818-312-0454</a>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-col-label">Office</h4>
+            <address>
+              15260 Ventura Blvd. #2<br>
+              Sherman Oaks, CA 91403
+            </address>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-col-label">Navigate</h4>
+            <nav class="footer-nav">
+              <a href="#about">About</a>
+              <a href="#services">Services</a>
+              <a href="#properties">Properties</a>
+              <a href="#insights">Insights</a>
+              <a href="#contact">Contact</a>
+            </nav>
+          </div>
+          <div class="footer-col footer-legal-col">
+            <p>DRE #01766071 · C.P.R.E.S.</p>
+            <p>Equal Housing Opportunity</p>
+            <!-- Social icons -->
+            <div class="footer-social">
+              <a href="#" class="footer-social-icon" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              </a>
+              <a href="#" class="footer-social-icon" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+              </a>
+              <a href="#" class="footer-social-icon" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              </a>
+              <a href="#" class="footer-social-icon" aria-label="Google Business Profile">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 14H13v-2.5h3.5V12H13V9.5h3.5V7H11v9h5.5v-2.5z"/><path d="M19 12.5h-2v1.5h2V12.5z" opacity=".5"/></svg>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="footer-info-grid">
-        <div class="footer-col">
-          <h4 class="footer-col-label">Linda Haim</h4>
-          <p>Luxury Real Estate Advisor</p>
-          <a href="mailto:Lindahaim90210@gmail.com">Lindahaim90210@gmail.com</a>
-          <a href="tel:+18183120454">+1 818-312-0454</a>
-        </div>
-        <div class="footer-col">
-          <h4 class="footer-col-label">Office</h4>
-          <address>
-            15260 Ventura Blvd. #2<br>
-            Sherman Oaks, CA 91403
-          </address>
-        </div>
-        <div class="footer-col">
-          <h4 class="footer-col-label">Navigate</h4>
-          <nav class="footer-nav">
-            <a href="#about">About</a>
-            <a href="#services">Services</a>
-            <a href="#properties">Properties</a>
-            <a href="#insights">Insights</a>
-            <a href="#contact">Contact</a>
-          </nav>
-        </div>
-        <div class="footer-col footer-legal-col">
-          <p>© 2024 Rodeo Realty. All rights reserved.</p>
-          <p>DRE #01766071 · C.P.R.E.S.</p>
-          <p>Equal Housing Opportunity</p>
-        </div>
+
+      <!-- Bottom brand bar -->
+      <div class="footer-brand-bar">
+        <span class="footer-copyright">© 2025 Rodeo Realty. All rights reserved.</span>
+        <div class="footer-big-brand">RODEO REALTY</div>
       </div>
+
     </div>
   </section>
 
