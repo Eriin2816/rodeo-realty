@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Property Details | Linda Haim · Rodeo Realty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:         #080705;
+      --bg-surface: #100e0b;
+      --bg-card:    #161210;
+      --gold:       #c9a96e;
+      --gold-light: #e4c896;
+      --gold-dim:   #7a6540;
+      --text:       #e8e0cf;
+      --text-muted: #9a9080;
+      --text-dim:   #5a5448;
+      --border:     rgba(201,169,110,0.18);
+      --border-mid: rgba(201,169,110,0.35);
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'Jost', system-ui, sans-serif;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    html { font-size: 18px; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; width: 100%; }
+    address { font-style: normal; }
+    button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
+
+    /* ---- HEADER ---- */
+    .site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 3rem;
+      background: rgba(8,7,5,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-brand { display: flex; flex-direction: column; gap: 0.1rem; }
+    .brand-name { font-family: var(--font-body); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text); }
+    .brand-agent { font-family: var(--font-display); font-size: 0.9rem; font-style: italic; color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 2.2rem; }
+    .nav-link { font-family: var(--font-body); font-size: 0.65rem; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); transition: color 0.25s; }
+    .nav-link:hover { color: var(--gold); }
+    .nav-cta { font-family: var(--font-body); font-size: 0.62rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bg); background: var(--gold); padding: 0.65rem 1.4rem; transition: background 0.25s; }
+    .nav-cta:hover { background: var(--gold-light); }
+
+    /* ---- BREADCRUMB ---- */
+    .breadcrumb {
+      padding: 6.5rem 3rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .breadcrumb a, .breadcrumb span {
+      font-family: var(--font-body);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: color 0.2s;
+    }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb .sep { color: var(--text-dim); }
+    .breadcrumb .current { color: var(--text-muted); }
+
+    /* ---- HERO GALLERY ---- */
+    .gallery-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .gallery-main {
+      position: relative;
+      width: 100%;
+      height: 480px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .gallery-main img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease-out); }
+    .gallery-main:hover img { transform: scale(1.03); }
+    .gallery-expand-btn {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: rgba(8,7,5,0.55);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      width: 2.2rem; height: 2.2rem;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .gallery-expand-btn:hover { background: rgba(8,7,5,0.85); }
+    .gallery-expand-btn svg { width: 1rem; height: 1rem; }
+    .gallery-thumbs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3px;
+      height: 130px;
+    }
+    .gallery-thumb {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-out); }
+    .gallery-thumb:hover img { transform: scale(1.06); }
+    .gallery-thumb-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(8,7,5,0.18);
+      transition: background 0.3s;
+    }
+    .gallery-thumb:hover .gallery-thumb-overlay { background: rgba(8,7,5,0.05); }
+    .gallery-more-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(8,7,5,0.62);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .gallery-more-overlay:hover { background: rgba(8,7,5,0.75); }
+    .gallery-more-count {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1;
+    }
+    .gallery-more-label {
+      font-family: var(--font-body);
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* ---- LIGHTBOX ---- */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(4,3,2,0.96);
+      backdrop-filter: blur(8px);
+      flex-direction: column;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .lightbox-title {
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .lightbox-counter {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--gold);
+    }
+    .lightbox-close {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      width: 2rem; height: 2rem;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      font-size: 1rem;
+    }
+    .lightbox-close:hover { border-color: var(--gold); color: var(--gold); }
+    .lightbox-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 1.5rem 4rem;
+    }
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 2px;
+      user-select: none;
+    }
+    .lightbox-nav {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      background: rgba(8,7,5,0.6);
+      border: 1px solid var(--border);
+      color: #fff;
+      width: 2.8rem; height: 2.8rem;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .lightbox-nav:hover { background: rgba(201,169,110,0.25); border-color: var(--gold); }
+    .lightbox-prev { left: 1rem; }
+    .lightbox-next { right: 1rem; }
+    .lightbox-nav svg { width: 1rem; height: 1rem; }
+    .lightbox-strip {
+      display: flex;
+      gap: 4px;
+      padding: 0.8rem 2rem;
+      overflow-x: auto;
+      flex-shrink: 0;
+      border-top: 1px solid var(--border);
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .lightbox-strip-thumb {
+      flex: 0 0 80px;
+      height: 55px;
+      overflow: hidden;
+      border-radius: 2px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .lightbox-strip-thumb.active { border-color: var(--gold); }
+    .lightbox-strip-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ---- MAIN CONTENT ---- */
+    .content-wrap {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 0;
+      align-items: start;
+      padding: 0 3rem;
+    }
+
+    /* Left column */
+    .prop-left {
+      padding: 2.5rem 3rem 4rem 0;
+      border-right: 1px solid var(--border);
+    }
+
+    .prop-location {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.6rem;
+    }
+    .prop-location svg { width: 0.8rem; height: 0.8rem; color: var(--gold); flex-shrink: 0; }
+    .prop-location span { font-family: var(--font-body); font-size: 0.72rem; color: var(--text-muted); }
+
+    .prop-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .prop-price-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .prop-price {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 500;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .prop-status {
+      font-family: var(--font-body);
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--gold);
+      padding: 0.3rem 0.8rem;
+    }
+
+    /* Key stats */
+    .prop-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 2.5rem;
+    }
+    .prop-stat {
+      background: var(--bg-card);
+      padding: 1.2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .prop-stat-val {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1;
+    }
+    .prop-stat-label {
+      font-family: var(--font-body);
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* Accordion */
+    .accordion { border-top: 1px solid var(--border); }
+    .accordion-item { border-bottom: 1px solid var(--border); }
+    .accordion-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 0;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .accordion-trigger:hover { color: var(--gold); }
+    .accordion-title {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .accordion-icon {
+      font-size: 1.2rem;
+      color: var(--gold);
+      transition: transform 0.3s var(--ease-out);
+      line-height: 1;
+    }
+    .accordion-item.open .accordion-icon { transform: rotate(45deg); }
+    .accordion-body {
+      display: none;
+      padding: 0 0 1.5rem;
+    }
+    .accordion-item.open .accordion-body { display: block; }
+
+    /* Specifications table */
+    .specs-table { width: 100%; border-collapse: collapse; }
+    .specs-table tr { border-bottom: 1px solid var(--border); }
+    .specs-table td {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      padding: 0.65rem 0;
+      color: var(--text-muted);
+    }
+    .specs-table td:first-child {
+      font-weight: 400;
+      color: var(--text);
+      width: 40%;
+      letter-spacing: 0.04em;
+    }
+
+    /* Map in accordion */
+    #prop-map { height: 520px; width: 100%; background: #e8e4dc; }
+    .leaflet-control-attribution { display: none; }
+    .leaflet-control-zoom a { background: #fff !important; color: #333 !important; border: 1px solid #ccc !important; }
+
+    /* Right column */
+    .prop-right {
+      padding: 2.5rem 0 4rem 2.5rem;
+      position: sticky;
+      top: 80px;
+    }
+
+    .contact-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 1.2rem;
+    }
+    .contact-card-label {
+      font-family: var(--font-body);
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 1.4rem;
+    }
+
+    .showing-btn {
+      display: block;
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--bg);
+      background: var(--gold);
+      padding: 1rem 1.5rem;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      transition: background 0.25s;
+    }
+    .showing-btn:hover { background: var(--gold-light); }
+
+    .contact-form { display: flex; flex-direction: column; gap: 0.7rem; }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: var(--text);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: 0.75rem 1rem;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: var(--text-dim); }
+    .contact-form input:focus,
+    .contact-form textarea:focus { outline: none; border-color: var(--gold-dim); }
+    .contact-form textarea { height: 80px; }
+    .contact-submit {
+      display: block;
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--bg);
+      background: var(--gold);
+      padding: 0.85rem;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+    .contact-submit:hover { background: var(--gold-light); }
+
+    /* Agent card */
+    .agent-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .agent-avatar {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid var(--border-mid);
+    }
+    .agent-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .agent-info {}
+    .agent-name {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.1rem;
+    }
+    .agent-title {
+      font-family: var(--font-body);
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+    }
+    .agent-phone {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      color: var(--gold);
+    }
+
+    /* ---- FOOTER ---- */
+    .site-footer {
+      background: rgba(6,5,4,0.98);
+      border-top: 1px solid var(--border);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5vw;
+      align-items: start;
+      padding: 4rem 3rem 2.5rem;
+    }
+    .footer-eyebrow { display: block; font-family: var(--font-body); font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 1.2rem; }
+    .footer-heading { font-family: var(--font-display); font-size: clamp(2rem, 3.5vw, 3.5rem); font-weight: 500; line-height: 0.95; color: var(--text); margin-bottom: 2rem; }
+    .footer-heading em { color: var(--gold); font-style: italic; }
+    .footer-btn-row { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+    .btn-primary { font-family: var(--font-body); font-size: 0.62rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bg); background: var(--gold); padding: 0.9rem 2rem; transition: background 0.25s; display: inline-block; }
+    .btn-primary:hover { background: var(--gold-light); }
+    .btn-ghost { font-family: var(--font-body); font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-mid); padding-bottom: 0.1rem; transition: color 0.25s; }
+    .btn-ghost:hover { color: var(--gold); }
+    .footer-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem 2rem; }
+    .footer-col { display: flex; flex-direction: column; gap: 0.35rem; }
+    .footer-col-label { font-family: var(--font-body); font-size: 0.62rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 0.5rem; }
+    .footer-col p, .footer-col address { font-family: var(--font-body); font-size: 0.82rem; font-weight: 300; color: var(--text-muted); line-height: 1.7; }
+    .footer-col a { font-family: var(--font-body); font-size: 0.82rem; font-weight: 300; color: var(--text-muted); transition: color 0.25s; }
+    .footer-col a:hover { color: var(--gold); }
+    .footer-nav { display: flex; flex-direction: column; gap: 0.3rem; }
+    .footer-social { display: flex; gap: 0.6rem; margin-top: 0.8rem; }
+    .footer-social-icon { display: flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border: 1px solid var(--border-mid); border-radius: 50%; color: var(--text-muted); transition: color 0.2s, border-color 0.2s, background 0.2s; }
+    .footer-social-icon svg { width: 0.85rem; height: 0.85rem; }
+    .footer-social-icon:hover { color: var(--gold); border-color: var(--gold); background: rgba(201,169,110,0.1); }
+    .footer-brand-bar { border-top: 1px solid var(--border); padding: 1rem 3rem 0; display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; overflow: visible; }
+    .footer-copyright { font-family: var(--font-body); font-size: 0.62rem; color: var(--text-dim); padding-bottom: 1rem; }
+    .footer-big-brand { font-family: var(--font-display); font-size: clamp(3.5rem, 7.5vw, 8rem); font-weight: 700; letter-spacing: -0.03em; line-height: 0.85; color: transparent; -webkit-text-stroke: 1px rgba(201,169,110,0.2); pointer-events: none; user-select: none; padding-bottom: 1.5rem; }
+
+    @media (max-width: 1024px) {
+      .content-wrap { grid-template-columns: 1fr; padding: 0 1.5rem; }
+      .prop-left { border-right: none; padding-right: 0; }
+      .prop-right { position: static; padding-left: 0; }
+      .gallery-main { height: 340px; }
+      .gallery-thumbs { height: 100px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .site-header { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .breadcrumb { padding: 5.5rem 1.5rem 1rem; }
+      .gallery-main { height: 240px; }
+      .gallery-thumbs { grid-template-columns: repeat(2, 1fr); height: 90px; }
+      .prop-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <a href="index.html" class="header-brand">
+      <span class="brand-name">Rodeo Realty</span>
+      <span class="brand-agent">Linda Haim</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#about"    class="nav-link">About</a>
+      <a href="index.html#services" class="nav-link">Services</a>
+      <a href="residences.html"     class="nav-link">Residences</a>
+      <a href="index.html#insights" class="nav-link">Insights</a>
+      <a href="index.html#contact"  class="nav-cta">Begin Your Journey</a>
+    </nav>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="sep">/</span>
+    <a href="residences.html">Residences</a>
+    <span class="sep">/</span>
+    <span class="current" id="bc-address">Property Details</span>
+  </div>
+
+  <!-- HERO GALLERY -->
+  <div class="gallery-wrap" id="gallery-wrap">
+    <div class="gallery-main" id="gallery-main" onclick="openLightbox(0)">
+      <img id="gallery-main-img" src="" alt="Property">
+      <button class="gallery-expand-btn" onclick="event.stopPropagation();openLightbox(0)" aria-label="View all photos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      </button>
+    </div>
+    <div class="gallery-thumbs" id="gallery-thumbs">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-header">
+      <span class="lightbox-title" id="lb-title">Photo Gallery</span>
+      <span class="lightbox-counter" id="lb-counter">1 / 3</span>
+      <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">✕</button>
+    </div>
+    <div class="lightbox-main">
+      <img class="lightbox-img" id="lb-img" src="" alt="">
+      <button class="lightbox-nav lightbox-prev" onclick="lbNav(-1)" aria-label="Previous">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="lightbox-nav lightbox-next" onclick="lbNav(1)" aria-label="Next">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+    <div class="lightbox-strip" id="lb-strip"></div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content-wrap">
+
+    <!-- LEFT -->
+    <div class="prop-left">
+
+      <div class="prop-location">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span id="prop-area">—</span>
+      </div>
+
+      <h1 class="prop-title" id="prop-title">—</h1>
+
+      <div class="prop-price-row">
+        <div class="prop-price" id="prop-price">—</div>
+        <span class="prop-status" id="prop-status">For Sale</span>
+      </div>
+
+      <!-- Stats -->
+      <div class="prop-stats" id="prop-stats"></div>
+
+      <!-- Accordion -->
+      <div class="accordion">
+
+        <div class="accordion-item" id="acc-specs">
+          <button class="accordion-trigger">
+            <span class="accordion-title">Specifications</span>
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <table class="specs-table" id="specs-table"></table>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="acc-map">
+          <button class="accordion-trigger">
+            <span class="accordion-title">Map &amp; Directions</span>
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div id="prop-map"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="prop-right">
+
+      <div class="contact-card">
+        <div class="contact-card-label">Schedule a Showing</div>
+        <button class="showing-btn" onclick="document.getElementById('contact-form').scrollIntoView({behavior:'smooth'})">
+          Request a Showing
+        </button>
+        <form class="contact-form" id="contact-form" action="#" method="POST" novalidate>
+          <input type="text"  name="name"    placeholder="Full Name"     required>
+          <input type="email" name="email"   placeholder="Email Address" required>
+          <input type="tel"   name="phone"   placeholder="Phone Number">
+          <textarea           name="message" placeholder="Message (optional)"></textarea>
+          <button type="submit" class="contact-submit">Send Inquiry</button>
+        </form>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-avatar">
+          <img src="brand_assets/linda-haim.jpeg" alt="Linda Haim">
+        </div>
+        <div class="agent-info">
+          <div class="agent-name">Linda Haim</div>
+          <div class="agent-title">Luxury Real Estate Advisor · DRE #01766071</div>
+          <a href="tel:+18183120454" class="agent-phone">+1 818-312-0454</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div>
+        <span class="footer-eyebrow">Rodeo Realty · Sherman Oaks</span>
+        <h2 class="footer-heading">Ready to Begin<br><em>Your Journey?</em></h2>
+        <div class="footer-btn-row">
+          <a href="index.html#contact" class="btn-primary">Schedule a Consultation</a>
+          <a href="tel:+18183120454"   class="btn-ghost">+1 818-312-0454</a>
+        </div>
+      </div>
+      <div class="footer-info-grid">
+        <div class="footer-col">
+          <h4 class="footer-col-label">Linda Haim</h4>
+          <p>Luxury Real Estate Advisor</p>
+          <a href="mailto:Lindahaim90210@gmail.com">Lindahaim90210@gmail.com</a>
+          <a href="tel:+18183120454">+1 818-312-0454</a>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-col-label">Office</h4>
+          <address>15260 Ventura Blvd. #2<br>Sherman Oaks, CA 91403</address>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-col-label">Navigate</h4>
+          <nav class="footer-nav">
+            <a href="index.html#about">About</a>
+            <a href="index.html#services">Services</a>
+            <a href="residences.html">Residences</a>
+            <a href="index.html#insights">Insights</a>
+            <a href="index.html#contact">Contact</a>
+          </nav>
+        </div>
+        <div class="footer-col">
+          <p style="font-size:0.65rem;color:var(--text-dim);">DRE #01766071 · C.P.R.E.S.</p>
+          <p style="font-size:0.65rem;color:var(--text-dim);">Equal Housing Opportunity</p>
+          <a href="privacy-policy.html" style="font-size:0.65rem;color:var(--text-dim);margin-top:0.4rem;">Privacy Policy</a>
+          <a href="terms-and-conditions.html" style="font-size:0.65rem;color:var(--text-dim);">Terms &amp; Conditions</a>
+          <div class="footer-social">
+            <a href="#" class="footer-social-icon" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+            <a href="#" class="footer-social-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg></a>
+            <a href="#" class="footer-social-icon" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+            <a href="#" class="footer-social-icon" aria-label="Google Business"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 14H13v-2.5h3.5V12H13V9.5h3.5V7H11v9h5.5v-2.5z"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-brand-bar">
+      <span class="footer-copyright">© 2025 Rodeo Realty · Linda Haim. All rights reserved.</span>
+      <div class="footer-big-brand">RODEO REALTY</div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ---- PROPERTY DATA ----
+    const properties = {
+      1: {
+        id: 1,
+        img: 'brand_assets/woodman-ave.jpeg',
+        imgs: ['brand_assets/woodman-ave.jpeg','brand_assets/studio-city.jpeg','brand_assets/encino.jpeg','brand_assets/woodman-ave.jpeg','brand_assets/studio-city.jpeg','brand_assets/encino.jpeg','brand_assets/woodman-ave.jpeg'],
+        price: '$2,850,000',
+        address: '4821 Woodman Ave',
+        area: 'Sherman Oaks, CA 91423',
+        status: 'For Sale',
+        badge: 'Featured Listing',
+        beds: 5, baths: '4.5', halfBaths: 1, sqft: '4,200', garage: 3, stories: 2,
+        year: 2019, lot: '9,200 SF', pool: 'Yes', style: 'Contemporary',
+        lat: 34.1558, lng: -118.4493
+      },
+      2: {
+        id: 2,
+        img: 'brand_assets/studio-city.jpeg',
+        imgs: ['brand_assets/studio-city.jpeg','brand_assets/woodman-ave.jpeg','brand_assets/encino.jpeg','brand_assets/studio-city.jpeg','brand_assets/woodman-ave.jpeg','brand_assets/encino.jpeg','brand_assets/studio-city.jpeg'],
+        price: '$1,650,000',
+        address: '4312 Arch Dr',
+        area: 'Studio City, CA 91604',
+        status: 'For Sale',
+        badge: 'For Sale',
+        beds: 4, baths: '3', halfBaths: 0, sqft: '2,800', garage: 2, stories: 2,
+        year: 2015, lot: '6,500 SF', pool: 'No', style: 'Modern',
+        lat: 34.1394, lng: -118.3968
+      },
+      3: {
+        id: 3,
+        img: 'brand_assets/encino.jpeg',
+        imgs: ['brand_assets/encino.jpeg','brand_assets/woodman-ave.jpeg','brand_assets/studio-city.jpeg','brand_assets/encino.jpeg','brand_assets/woodman-ave.jpeg','brand_assets/studio-city.jpeg','brand_assets/encino.jpeg'],
+        price: '$3,200,000',
+        address: '16701 Marquez Ave',
+        area: 'Encino, CA 91436',
+        status: 'For Sale',
+        badge: 'For Sale',
+        beds: 6, baths: '5', halfBaths: 1, sqft: '5,100', garage: 3, stories: 2,
+        year: 2021, lot: '12,000 SF', pool: 'Yes', style: 'Mediterranean',
+        lat: 34.1514, lng: -118.5013
+      },
+      4: {
+        id: 4,
+        img: 'brand_assets/woodman-ave.jpeg',
+        imgs: ['brand_assets/woodman-ave.jpeg','brand_assets/encino.jpeg','brand_assets/studio-city.jpeg','brand_assets/woodman-ave.jpeg','brand_assets/encino.jpeg','brand_assets/studio-city.jpeg','brand_assets/woodman-ave.jpeg'],
+        price: '$4,100,000',
+        address: '1124 Bel Air Rd',
+        area: 'Bel Air, CA 90077',
+        status: 'For Sale',
+        badge: 'Exclusive',
+        beds: 6, baths: '6', halfBaths: 2, sqft: '5,800', garage: 4, stories: 3,
+        year: 2018, lot: '18,000 SF', pool: 'Yes', style: 'Estate',
+        lat: 34.0969, lng: -118.4609
+      },
+      5: {
+        id: 5,
+        img: 'brand_assets/studio-city.jpeg',
+        imgs: ['brand_assets/studio-city.jpeg','brand_assets/woodman-ave.jpeg','brand_assets/encino.jpeg','brand_assets/studio-city.jpeg','brand_assets/woodman-ave.jpeg','brand_assets/encino.jpeg','brand_assets/studio-city.jpeg'],
+        price: '$2,200,000',
+        address: '24500 Park Sorrento',
+        area: 'Calabasas, CA 91302',
+        status: 'For Sale',
+        badge: 'For Sale',
+        beds: 4, baths: '4', halfBaths: 0, sqft: '3,600', garage: 2, stories: 2,
+        year: 2017, lot: '8,400 SF', pool: 'Yes', style: 'Contemporary',
+        lat: 34.1439, lng: -118.6579
+      }
+    };
+
+    // ---- LOAD PROPERTY ----
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get('id')) || 1;
+    const p = properties[id] || properties[1];
+
+    document.title = `${p.address} | Linda Haim · Rodeo Realty`;
+    document.getElementById('bc-address').textContent = p.address;
+    document.getElementById('prop-area').textContent = p.area;
+    document.getElementById('prop-title').textContent = p.address;
+    document.getElementById('prop-price').textContent = p.price;
+    document.getElementById('prop-status').textContent = p.status;
+
+    // ---- GALLERY BUILD ----
+    const allImgs = p.imgs;
+    document.getElementById('gallery-main-img').src = allImgs[0];
+    document.getElementById('gallery-main-img').alt = p.address;
+
+    const thumbsEl = document.getElementById('gallery-thumbs');
+    const VISIBLE_THUMBS = 4;
+    allImgs.slice(1, VISIBLE_THUMBS + 1).forEach((src, i) => {
+      const isLast = i === VISIBLE_THUMBS - 1 && allImgs.length > VISIBLE_THUMBS + 1;
+      const remaining = allImgs.length - VISIBLE_THUMBS;
+      thumbsEl.innerHTML += `
+        <div class="gallery-thumb" onclick="openLightbox(${i + 1})">
+          <img src="${src}" alt="${p.address} view ${i + 2}" loading="lazy">
+          <div class="gallery-thumb-overlay"></div>
+          ${isLast ? `<div class="gallery-more-overlay" onclick="event.stopPropagation();openLightbox(${i + 1})">
+            <span class="gallery-more-count">+${remaining}</span>
+            <span class="gallery-more-label">View All Photos</span>
+          </div>` : ''}
+        </div>`;
+    });
+
+    // ---- LIGHTBOX LOGIC ----
+    let lbIndex = 0;
+    const lbImg = document.getElementById('lb-img');
+    const lbCounter = document.getElementById('lb-counter');
+    const lbStrip = document.getElementById('lb-strip');
+    document.getElementById('lb-title').textContent = p.address + ' — Photo Gallery';
+
+    // Build strip
+    allImgs.forEach((src, i) => {
+      lbStrip.innerHTML += `<div class="lightbox-strip-thumb${i === 0 ? ' active' : ''}" data-idx="${i}" onclick="lbGoTo(${i})">
+        <img src="${src}" alt="Photo ${i + 1}" loading="lazy">
+      </div>`;
+    });
+
+    function lbGoTo(idx) {
+      lbIndex = (idx + allImgs.length) % allImgs.length;
+      lbImg.src = allImgs[lbIndex];
+      lbCounter.textContent = `${lbIndex + 1} / ${allImgs.length}`;
+      document.querySelectorAll('.lightbox-strip-thumb').forEach((el, i) => el.classList.toggle('active', i === lbIndex));
+      const activeThumb = lbStrip.querySelector('.lightbox-strip-thumb.active');
+      if (activeThumb) activeThumb.scrollIntoView({ inline: 'center', behavior: 'smooth' });
+    }
+    window.lbGoTo = lbGoTo;
+
+    window.openLightbox = function(startIdx) {
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      lbGoTo(startIdx);
+    };
+    window.closeLightbox = function() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    };
+    window.lbNav = function(dir) { lbGoTo(lbIndex + dir); };
+
+    // Keyboard nav
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('lightbox').classList.contains('active')) return;
+      if (e.key === 'ArrowRight') lbNav(1);
+      else if (e.key === 'ArrowLeft') lbNav(-1);
+      else if (e.key === 'Escape') closeLightbox();
+    });
+
+    // Stats
+    const statsData = [
+      { val: p.beds,      label: 'Bedrooms'  },
+      { val: p.baths,     label: 'Full Baths' },
+      { val: p.sqft,      label: 'Sq Ft'     },
+      { val: p.garage,    label: 'Garage'    },
+      { val: p.stories,   label: 'Stories'   },
+      { val: p.year,      label: 'Year Built' },
+    ];
+    const statsEl = document.getElementById('prop-stats');
+    statsData.forEach(s => {
+      statsEl.innerHTML += `
+        <div class="prop-stat">
+          <span class="prop-stat-val">${s.val}</span>
+          <span class="prop-stat-label">${s.label}</span>
+        </div>`;
+    });
+
+    // Specs table
+    const specs = [
+      ['Price',        p.price],
+      ['Status',       p.status],
+      ['Address',      `${p.address}, ${p.area}`],
+      ['Bedrooms',     p.beds],
+      ['Bathrooms',    p.baths],
+      ['Half Baths',   p.halfBaths],
+      ['Square Feet',  p.sqft + ' SF'],
+      ['Lot Size',     p.lot],
+      ['Garage',       p.garage + ' Car'],
+      ['Stories',      p.stories],
+      ['Year Built',   p.year],
+      ['Pool',         p.pool],
+      ['Style',        p.style],
+      ['Agent',        'Linda Haim · DRE #01766071'],
+      ['Brokerage',    'Rodeo Realty'],
+    ];
+    const table = document.getElementById('specs-table');
+    specs.forEach(([k, v]) => {
+      table.innerHTML += `<tr><td>${k}</td><td>${v}</td></tr>`;
+    });
+
+    // ---- ACCORDION ----
+    document.querySelectorAll('.accordion-trigger').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.accordion-item');
+        const wasOpen = item.classList.contains('open');
+        document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('open'));
+        if (!wasOpen) {
+          item.classList.add('open');
+          // Init map when map accordion opens
+          if (item.id === 'acc-map' && !window._mapInited) {
+            window._mapInited = true;
+            setTimeout(() => {
+              const map = L.map('prop-map', { center: [p.lat, p.lng], zoom: 15, zoomControl: true, scrollWheelZoom: true, dragging: true });
+              L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd' }).addTo(map);
+              const icon = L.divIcon({
+                className: '',
+                html: '<div style="width:14px;height:14px;background:#c9a96e;border:2.5px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.35);"></div>',
+                iconSize: [14, 14], iconAnchor: [7, 7]
+              });
+              L.marker([p.lat, p.lng], { icon }).addTo(map)
+                .bindPopup(`<b style="font-family:Georgia;color:#c9a96e">${p.address}</b><br><span style="font-size:0.75rem">${p.area}</span>`).openPopup();
+              map.invalidateSize();
+            }, 100);
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -525,7 +525,7 @@ em { font-style: italic; }
 
 .section-insights .section-inner {
   padding: 2.5rem 2rem;
-  background: linear-gradient(135deg, rgba(8,7,5,0.78) 0%, rgba(8,7,5,0.5) 80%, transparent 100%);
+  background: linear-gradient(135deg, rgba(8,7,5,0.96) 0%, rgba(8,7,5,0.92) 70%, rgba(8,7,5,0.80) 100%);
 }
 
 /* Section inner common */
@@ -792,6 +792,8 @@ em { font-style: italic; }
 /* -- Featured hero card -- */
 .prop-hero {
   margin-bottom: 1.2rem;
+  display: block;
+  cursor: pointer;
 }
 
 .prop-hero-img-wrap {
@@ -870,6 +872,7 @@ em { font-style: italic; }
 .prop-slide {
   flex: 0 0 calc(33.333% - 0.67rem);
   min-width: 0;
+  display: block;
   background: var(--bg-card);
   overflow: hidden;
   transition: transform 0.35s var(--ease-out);
@@ -1444,7 +1447,7 @@ em { font-style: italic; }
   align-items: flex-end;
   justify-content: space-between;
   gap: 1rem;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .footer-copyright {
@@ -1468,6 +1471,7 @@ em { font-style: italic; }
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
+  padding-bottom: 1.5rem;
 }
 
 /* ---- MOBILE RESPONSIVE ---- */
